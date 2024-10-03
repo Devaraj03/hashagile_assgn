@@ -1,0 +1,81 @@
+class EmployeeCollection:
+    def __init__(self):
+        self.collections = {}
+
+    def createCollection(self, p_collection_name):
+        if p_collection_name not in self.collections:
+            self.collections[p_collection_name] = []
+            print(f"Collection '{p_collection_name}' created.")
+        else:
+            print(f"Collection '{p_collection_name}' already exists.")
+
+    def indexData(self, p_collection_name, p_exclude_column):
+        if p_collection_name not in self.collections:
+            print(f"Collection '{p_collection_name}' does not exist.")
+            return
+
+        # Sample employee data for demonstration
+        sample_data = [
+            {"id": 1, "name": "Alice", "department": "HR"},
+            {"id": 2, "name": "Bob", "department": "Engineering"},
+            {"id": 3, "name": "Charlie", "department": "Sales"},
+            {"id": 4, "name": "David", "department": "Engineering"},
+            {"id": 5, "name": "Eve", "department": "HR"}
+        ]
+
+        for record in sample_data:
+            indexed_record = {k: v for k, v in record.items() if k != p_exclude_column}
+            self.collections[p_collection_name].append(indexed_record)
+
+        print(f"Data indexed into '{p_collection_name}' excluding '{p_exclude_column}'.")
+
+    def searchByColumn(self, p_collection_name, p_column_name, p_column_value):
+        if p_collection_name not in self.collections:
+            print(f"Collection '{p_collection_name}' does not exist.")
+            return []
+
+        results = [
+            record for record in self.collections[p_collection_name]
+            if record.get(p_column_name) == p_column_value
+        ]
+        return results
+
+    def getEmpCount(self, p_collection_name):
+        if p_collection_name not in self.collections:
+            print(f"Collection '{p_collection_name}' does not exist.")
+            return 0
+        return len(self.collections[p_collection_name])
+
+    def delEmpById(self, p_collection_name, p_employee_id):
+        if p_collection_name not in self.collections:
+            print(f"Collection '{p_collection_name}' does not exist.")
+            return
+        
+        initial_count = len(self.collections[p_collection_name])
+        self.collections[p_collection_name] = [
+            record for record in self.collections[p_collection_name] if record.get("id") != p_employee_id
+        ]
+        if len(self.collections[p_collection_name]) < initial_count:
+            print(f"Employee with ID '{p_employee_id}' deleted from '{p_collection_name}'.")
+        else:
+            print(f"No employee with ID '{p_employee_id}' found in '{p_collection_name}'.")
+
+    def getDepFacet(self, p_collection_name):
+        if p_collection_name not in self.collections:
+            print(f"Collection '{p_collection_name}' does not exist.")
+            return {}
+
+        department_count = {}
+        for record in self.collections[p_collection_name]:
+            dept = record.get("department")
+            if dept:
+                department_count[dept] = department_count.get(dept, 0) + 1
+        return department_count
+
+emp_collection = EmployeeCollection()
+emp_collection.createCollection("employees")
+emp_collection.indexData("employees", "id")
+print(emp_collection.searchByColumn("employees", "name", "Alice"))
+print(f"Employee Count: {emp_collection.getEmpCount('employees')}")
+emp_collection.delEmpById("employees", 2)
+print(emp_collection.getDepFacet("employees"))
