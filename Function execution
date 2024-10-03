@@ -1,0 +1,32 @@
+my_name = "JohnDoe"  
+last_four_digits = "1234"  
+
+v_nameCollection = f"Hash_{my_name}"
+v_phoneCollection = f"Hash_{last_four_digits}"
+
+
+emp_collection = EmployeeCollection()
+
+emp_collection.createCollection(v_nameCollection)
+emp_collection.createCollection(v_phoneCollection)
+
+print(f"Initial Employee Count in '{v_nameCollection}': {emp_collection.getEmpCount(v_nameCollection)}")
+
+emp_collection.indexData(v_nameCollection, 'Department')
+
+emp_collection.indexData(v_phoneCollection, 'Gender')
+
+emp_collection.delEmpById(v_nameCollection, 'E02003')
+
+print(f"Employee Count after indexing in '{v_nameCollection}': {emp_collection.getEmpCount(v_nameCollection)}")
+
+print(f"Search results for 'IT' in '{v_nameCollection}': {emp_collection.searchByColumn(v_nameCollection, 'Department', 'IT')}")
+
+print(f"Search results for 'Male' in '{v_nameCollection}': {emp_collection.searchByColumn(v_nameCollection, 'Gender', 'Male')}")
+
+print(f"Search results for 'IT' in '{v_phoneCollection}': {emp_collection.searchByColumn(v_phoneCollection, 'Department', 'IT')}")
+
+print(f"Department facet counts in '{v_nameCollection}': {emp_collection.getDepFacet(v_nameCollection)}")
+
+print(f"Department facet counts in '{v_phoneCollection}': {emp_collection.getDepFacet(v_phoneCollection)}")
+
